@@ -152,31 +152,50 @@ document.addEventListener("DOMContentLoaded", function () {
 // #################################################################################################################################
 // Fungsi untuk menyalin teks ke clipboard
 function copyToClipboard(color, text) {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      Swal.fire({
-        title: "Berhasil!",
-        text: "Data berhasil disalin.",
-        icon: "success",
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Teks berhasil disalin.",
+          icon: "success",
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          showCloseButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+      })
+      .catch((err) => {
+        console.error("Gagal menyalin teks", err);
+        Swal.fire({
+          title: "Gagal!",
+          text: "Gagal menyalin teks",
+          icon: "error",
+          showCloseButton: true,
+        });
       });
-
-    })
-    .catch((err) => {
-      console.error("Gagal menyalin teks", err);
-      Swal.fire({
-        title: "Gagal!",
-        text: "Gagal menyalin teks",
-        icon: "error",
-        customClass: {
-          confirmButton: color,
-        },
-      });
+  } else {
+    // Fallback untuk browser yang tidak mendukung Clipboard API
+    var textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    Swal.fire({
+      title: "Berhasil!",
+      text: "Teks berhasil disalin.",
+      icon: "success",
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      showCloseButton: true,
+      timer: 3000,
+      timerProgressBar: true,
     });
+  }
 }
 
 // #################################################################################################################################

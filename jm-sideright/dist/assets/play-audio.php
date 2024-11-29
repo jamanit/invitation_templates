@@ -14,6 +14,6 @@ function play_audio($filepath)
     readfile($filepath);
 }
 
-$filepath = __DIR__ . '/../../../storage/audio/default-audio.mp3';
+$filepath = __DIR__ . '/../../storage/audio/default-audio.mp3';
 
 play_audio($filepath);
